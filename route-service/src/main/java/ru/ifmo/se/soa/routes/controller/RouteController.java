@@ -12,7 +12,6 @@ import ru.ifmo.se.soa.routes.exception.EntityValidationException;
 import ru.ifmo.se.soa.routes.service.RouteService;
 import ru.ifmo.se.soa.routes.util.ControllerUtils;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -36,8 +35,8 @@ public class RouteController {
             @Valid @RequestBody RouteRequest routeRequest,
             BindingResult bindingResult
     ) throws EntityValidationException {
-        RouteDto routeDto = routeService.create(routeRequest, bindingResult);
-        URI uri = ControllerUtils.createLocationUri(routeDto.id());
+        var routeDto = routeService.create(routeRequest, bindingResult);
+        var uri = ControllerUtils.createLocationUri(routeDto.id());
         return ResponseEntity.created(uri).body(routeDto);
     }
 

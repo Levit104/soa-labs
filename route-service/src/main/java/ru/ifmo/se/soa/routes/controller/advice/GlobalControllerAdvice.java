@@ -36,7 +36,7 @@ public class GlobalControllerAdvice {
             EntityValidationException.class
     })
     public ResponseEntity<ApiError> handleValidationExceptions(HttpServletRequest request, BindException e) {
-        Map<String, String> validationErrors = e.getBindingResult()
+        var validationErrors = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .collect(Collectors.toMap(
@@ -84,7 +84,7 @@ public class GlobalControllerAdvice {
     private ResponseEntity<ApiError> newError(
             HttpServletRequest request, HttpStatus status, String message, Map<String, String> validationErrors
     ) {
-        ApiError apiError = new ApiError(
+        var apiError = new ApiError(
                 new Date(),
                 status.value(),
                 status.getReasonPhrase(),

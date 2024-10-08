@@ -19,7 +19,7 @@ public class JpaProperties {
     private String physicalNamingStrategy;
 
     public Properties get() {
-        Properties properties = new Properties();
+        var properties = new Properties();
         properties.setProperty("hibernate.show_sql", showSql);
         properties.setProperty("hibernate.hbm2ddl.auto", ddlAuto);
         properties.setProperty("hibernate.physical_naming_strategy", physicalNamingStrategy);

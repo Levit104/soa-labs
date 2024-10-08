@@ -9,7 +9,6 @@ import ru.ifmo.se.soa.routes.dto.LocationRequest;
 import ru.ifmo.se.soa.routes.service.LocationService;
 import ru.ifmo.se.soa.routes.util.ControllerUtils;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,8 +29,8 @@ public class LocationController {
 
     @PostMapping
     public ResponseEntity<LocationDto> create(@Valid @RequestBody LocationRequest locationRequest) {
-        LocationDto locationDto = locationService.create(locationRequest);
-        URI uri = ControllerUtils.createLocationUri(locationDto.id());
+        var locationDto = locationService.create(locationRequest);
+        var uri = ControllerUtils.createLocationUri(locationDto.id());
         return ResponseEntity.created(uri).body(locationDto);
     }
 }

@@ -25,13 +25,13 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<LocationDto> getAll() {
-        List<Location> locations = locationRepository.findAll();
+        var locations = locationRepository.findAll();
         return locationMapper.toDtoList(locations);
     }
 
     @Override
     public LocationDto get(Long id) {
-        Location location = find(id);
+        var location = find(id);
         return locationMapper.toDto(location);
     }
 
@@ -39,7 +39,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDto create(LocationRequest locationRequest) {
         validate(locationRequest);
-        Location location = locationMapper.toEntity(locationRequest);
+        var location = locationMapper.toEntity(locationRequest);
         locationRepository.save(location);
         return locationMapper.toDto(location);
     }
