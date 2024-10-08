@@ -79,13 +79,13 @@ public class RouteServiceImpl implements RouteService {
 
     private Route findById(Integer id) {
         return routeRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Маршрут #" + id + " не найден")
+                () -> new EntityNotFoundException("Маршрут #%d не найден".formatted(id))
         );
     }
 
     private Route findOneByDistance(Integer distance) {
         return routeRepository.findOneByDistance(distance).orElseThrow(
-                () -> new EntityNotFoundException("Маршрут с расстоянием " + distance + " не найден")
+                () -> new EntityNotFoundException("Маршрут с расстоянием %d не найден".formatted(distance))
         );
     }
 

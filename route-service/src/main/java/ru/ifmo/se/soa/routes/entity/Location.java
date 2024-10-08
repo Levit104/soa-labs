@@ -17,11 +17,11 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    private Coordinates coordinates;
-
     @Column(columnDefinition = "varchar(255) check (trim(name) <> '')", nullable = false, unique = true)
     private String name;
+
+    @Embedded
+    private Coordinates coordinates;
 
     @OneToMany(mappedBy = "from")
     @ToString.Exclude

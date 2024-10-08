@@ -88,7 +88,7 @@ public class GlobalControllerAdvice {
                 new Date(),
                 status.value(),
                 status.getReasonPhrase(),
-                request.getMethod() + " " + request.getRequestURI(),
+                "%s %s".formatted(request.getMethod(), request.getRequestURI()),
                 message,
                 validationErrors
         );

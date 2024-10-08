@@ -6,11 +6,11 @@ import jakarta.validation.constraints.NotNull;
 import ru.ifmo.se.soa.routes.util.ValidationUtils;
 
 public record LocationRequest(
+        @NotBlank(message = ValidationUtils.NOT_BLANK_MSG)
+        String name,
+
         @Valid
         @NotNull(message = ValidationUtils.NOT_NULL_MSG)
-        CoordinatesDto coordinates,
-
-        @NotBlank(message = ValidationUtils.NOT_BLANK_MSG)
-        String name
+        CoordinatesDto coordinates
 ) {
 }

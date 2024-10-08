@@ -1,6 +1,9 @@
 package ru.ifmo.se.soa.routes.util;
 
 public class ValidationUtils {
+    private ValidationUtils() {
+    }
+
     public static final String NOT_NULL_MSG = "Поле не может быть null";
     public static final String NOT_BLANK_MSG = "Строка не может быть пустой";
 

@@ -47,7 +47,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Location find(Long id) {
         return locationRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Локация #" + id + " не найдена")
+                () -> new EntityNotFoundException("Локация #%d не найдена".formatted(id))
         );
     }
 
