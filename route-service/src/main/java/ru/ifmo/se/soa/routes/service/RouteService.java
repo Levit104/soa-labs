@@ -3,6 +3,7 @@ package ru.ifmo.se.soa.routes.service;
 import org.springframework.validation.BindingResult;
 import ru.ifmo.se.soa.routes.dto.RouteDto;
 import ru.ifmo.se.soa.routes.dto.RouteRequest;
+import ru.ifmo.se.soa.routes.dto.group.RouteSummary;
 import ru.ifmo.se.soa.routes.exception.EntityValidationException;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface RouteService {
     RouteDto update(Integer id, RouteRequest routeRequest, BindingResult bindingResult) throws EntityValidationException;
 
     void delete(Integer id);
+
+    List<RouteSummary> groupByFrom();
 }

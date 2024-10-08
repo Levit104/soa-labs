@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
+import ru.ifmo.se.soa.routes.dto.group.RouteSummary;
 import ru.ifmo.se.soa.routes.entity.Route;
 
 import java.util.List;
@@ -13,4 +14,8 @@ public interface RouteRepository extends JpaRepository<Route, Integer> {
     @NonNull
     @Query("select r from Route r left join fetch r.from f left join fetch r.to t")
     List<Route> findAll();
+
+    @Query("select new ru.ifmo.se.soa.routes.dto.group.RouteSummary(r.from.name, count(*)) " +
+            "from Route r group by r.from order by r.from.name")
+    List<RouteSummary> groupByFrom();
 }

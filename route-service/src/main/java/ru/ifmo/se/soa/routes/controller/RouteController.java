@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.soa.routes.dto.RouteDto;
 import ru.ifmo.se.soa.routes.dto.RouteRequest;
+import ru.ifmo.se.soa.routes.dto.group.RouteSummary;
 import ru.ifmo.se.soa.routes.exception.EntityValidationException;
 import ru.ifmo.se.soa.routes.service.RouteService;
 import ru.ifmo.se.soa.routes.util.ControllerUtils;
@@ -53,5 +54,10 @@ public class RouteController {
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         routeService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/group/from")
+    public List<RouteSummary> groupByFrom() {
+        return routeService.groupByFrom();
     }
 }

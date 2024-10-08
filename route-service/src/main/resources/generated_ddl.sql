@@ -19,6 +19,12 @@ create table route
     primary key (id)
 );
 
+alter table if exists location
+    drop constraint if exists UKsahixf1v7f7xns19cbg12d946;
+
+alter table if exists location
+    add constraint UKsahixf1v7f7xns19cbg12d946 unique (name);
+
 alter table if exists route
     add constraint FK4ym959gsev0tmcltrwp5ybhp4 foreign key (from_id) references location;
 

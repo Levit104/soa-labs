@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import ru.ifmo.se.soa.routes.dto.ApiError;
-import ru.ifmo.se.soa.routes.exception.EntityNotFoundException;
-import ru.ifmo.se.soa.routes.exception.EntityValidationException;
+import ru.ifmo.se.soa.routes.exception.*;
 
 import java.util.Date;
 import java.util.Map;
@@ -47,6 +46,11 @@ public class GlobalControllerAdvice {
         return newError(request, HttpStatus.UNPROCESSABLE_ENTITY, "Невалидные данные", validationErrors);
     }
 
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleAlreadyExistsException(HttpServletRequest request, Exception e) {
+        return newError(request, HttpStatus.CONFLICT, e.getMessage());
+    }
+
     @ExceptionHandler({
             HttpMessageNotReadableException.class,
             MethodArgumentTypeMismatchException.class
@@ -66,7 +70,7 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleOtherException(HttpServletRequest request, Exception e) {
+    public ResponseEntity<ApiError> handleOtherExceptions(HttpServletRequest request, Exception e) {
         return newError(request, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 

@@ -11,4 +11,8 @@ public class ValidationUtils {
     public static final long MAX_COORDINATES_X_VAL = 251;
 
     public static final String SAME_LOCATION_MSG = "Локации отправления и назначения не могут совпадать";
+
+    public static final String LOCATION_NAME_TAKEN = "Локация с указанным названием уже существует";
+
+    public static final String LOCATION_COORDINATES_TAKEN = "Локация с указанными координатами уже существует";
 }

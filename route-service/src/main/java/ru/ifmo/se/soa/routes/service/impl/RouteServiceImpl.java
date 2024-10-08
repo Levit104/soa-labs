@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import ru.ifmo.se.soa.routes.dto.RouteDto;
 import ru.ifmo.se.soa.routes.dto.RouteRequest;
+import ru.ifmo.se.soa.routes.dto.group.RouteSummary;
 import ru.ifmo.se.soa.routes.entity.Location;
 import ru.ifmo.se.soa.routes.entity.Route;
 import ru.ifmo.se.soa.routes.exception.EntityNotFoundException;
@@ -62,6 +63,11 @@ public class RouteServiceImpl implements RouteService {
     public void delete(Integer id) {
         Route route = findById(id);
         routeRepository.delete(route);
+    }
+
+    @Override
+    public List<RouteSummary> groupByFrom() {
+        return routeRepository.groupByFrom();
     }
 
     private Route findById(Integer id) {
