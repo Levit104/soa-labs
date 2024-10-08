@@ -65,6 +65,13 @@ public class RouteServiceImpl implements RouteService {
         routeRepository.delete(route);
     }
 
+    @Transactional
+    @Override
+    public void deleteOneByDistance(Integer distance) {
+        Route route = findOneByDistance(distance);
+        routeRepository.delete(route);
+    }
+
     @Override
     public List<RouteSummary> groupByFrom() {
         return routeRepository.groupByFrom();
@@ -73,6 +80,12 @@ public class RouteServiceImpl implements RouteService {
     private Route findById(Integer id) {
         return routeRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Маршрут #" + id + " не найден")
+        );
+    }
+
+    private Route findOneByDistance(Integer distance) {
+        return routeRepository.findOneByDistance(distance).orElseThrow(
+                () -> new EntityNotFoundException("Маршрут с расстоянием " + distance + " не найден")
         );
     }
 

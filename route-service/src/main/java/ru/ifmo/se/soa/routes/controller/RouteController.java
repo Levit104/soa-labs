@@ -56,6 +56,12 @@ public class RouteController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/one/distance/{distance}")
+    public ResponseEntity<Void> deleteOneByDistance(@PathVariable Integer distance) {
+        routeService.deleteOneByDistance(distance);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/group/from")
     public List<RouteSummary> groupByFrom() {
         return routeService.groupByFrom();

@@ -19,5 +19,7 @@ public interface RouteService {
 
     void delete(Integer id);
 
+    void deleteOneByDistance(Integer distance);
+
     List<RouteSummary> groupByFrom();
 }
