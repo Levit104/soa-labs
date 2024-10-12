@@ -1,5 +1,6 @@
 package ru.ifmo.se.soa.routes.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
@@ -12,21 +13,13 @@ import java.util.Optional;
 
 @Repository
 public interface RouteRepository extends JpaRepository<Route, Integer> {
+    @Override
     @NonNull
-    @Query("""
-            select r from Route r \
-            left join fetch r.from f \
-            left join fetch r.to t
-            """)
+    @EntityGraph(value = "route-fetch-join")
     List<Route> findAll();
 
-    @Query("""
-            select r from Route r \
-            left join fetch r.from f \
-            left join fetch r.to t \
-            where r.distance = :distance \
-            order by random() limit 1
-            """)
+    @EntityGraph(value = "route-fetch-join")
+    @Query("select r from Route r where r.distance = :distance order by random() limit 1")
     Optional<Route> findOneByDistance(Integer distance);
 
     @Query("""

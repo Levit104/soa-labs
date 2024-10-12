@@ -8,6 +8,10 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@NamedEntityGraph(
+        name = "route-fetch-join",
+        attributeNodes = {@NamedAttributeNode("from"), @NamedAttributeNode("to")}
+)
 @Getter
 @Setter
 @ToString
