@@ -45,8 +45,6 @@ public class ValidationUtils {
     }
 
     public static <T> boolean hasDuplicates(List<T> list) {
-        System.out.println(list);
-        System.out.println(list.stream().distinct().toList());
         return list.stream().distinct().toList().size() != list.size();
     }
 }

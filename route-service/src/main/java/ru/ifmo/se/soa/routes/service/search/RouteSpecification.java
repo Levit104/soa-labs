@@ -5,7 +5,7 @@ import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import ru.ifmo.se.soa.routes.dto.search.FilterSpec;
-import ru.ifmo.se.soa.routes.entity.Route;
+import ru.ifmo.se.soa.routes.entity.*;
 import ru.ifmo.se.soa.routes.exception.InvalidSearchSpecsException;
 import ru.ifmo.se.soa.routes.util.DateUtils;
 import ru.ifmo.se.soa.routes.util.ValidationUtils;
@@ -17,7 +17,7 @@ public class RouteSpecification {
     private RouteSpecification() {
     }
 
-    public static Specification<Route> applyFilters(List<FilterSpec> filters) {
+    public static Specification<Route> applyFilters(List<FilterSpec> filters, boolean anyFilter) {
         if (filters == null || filters.isEmpty()) {
             return null;
         }
@@ -33,6 +33,10 @@ public class RouteSpecification {
 
         if (specs.isEmpty()) {
             throw new InvalidSearchSpecsException("Некорректные параметры фильтрации");
+        }
+
+        if (anyFilter) {
+            return Specification.anyOf(specs);
         }
 
         return Specification.allOf(specs);
@@ -71,7 +75,7 @@ public class RouteSpecification {
 
     private static Specification<Route> byId(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("id").as(Integer.class);
+            var path = root.get(Route_.id);
             return getPredicate(cb, operation, path, validInt(value));
         };
     }
@@ -79,28 +83,28 @@ public class RouteSpecification {
     private static Specification<Route> byName(String operation, String value) {
         validateStringOperation(operation, value);
         return (root, query, cb) -> {
-            var path = root.get("name").as(String.class);
+            var path = root.get(Route_.name);
             return getPredicate(cb, operation, path, value);
         };
     }
 
     private static Specification<Route> byCreationDate(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("creationDate").as(Date.class);
+            var path = root.get(Route_.creationDate);
             return getPredicate(cb, operation, path, validDate(value));
         };
     }
 
     private static Specification<Route> byDistance(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("distance").as(Integer.class);
+            var path = root.get(Route_.distance);
             return getPredicate(cb, operation, path, validInt(value));
         };
     }
 
     private static Specification<Route> byFromId(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("from").get("id").as(Long.class);
+            var path = root.get(Route_.from).get(Location_.id);
             return getPredicate(cb, operation, path, validLong(value));
         };
     }
@@ -108,35 +112,35 @@ public class RouteSpecification {
     private static Specification<Route> byFromName(String operation, String value) {
         validateStringOperation(operation, value);
         return (root, query, cb) -> {
-            var path = root.get("from").get("name").as(String.class);
+            var path = root.get(Route_.from).get(Location_.name);
             return getPredicate(cb, operation, path, value);
         };
     }
 
     private static Specification<Route> byFromCoordinatesX(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("from").get("coordinates").get("x").as(Long.class);
+            var path = root.get(Route_.from).get(Location_.coordinates).get(Coordinates_.x);
             return getPredicate(cb, operation, path, validLong(value));
         };
     }
 
     private static Specification<Route> byFromCoordinatesY(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("from").get("coordinates").get("y").as(Integer.class);
+            var path = root.get(Route_.from).get(Location_.coordinates).get(Coordinates_.y);
             return getPredicate(cb, operation, path, validInt(value));
         };
     }
 
     private static Specification<Route> fromCoordinatesZ(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("from").get("coordinates").get("z").as(Long.class);
+            var path = root.get(Route_.from).get(Location_.coordinates).get(Coordinates_.z);
             return getPredicate(cb, operation, path, validLong(value));
         };
     }
 
     private static Specification<Route> toId(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("to").get("id").as(Long.class);
+            var path = root.get(Route_.to).get(Location_.id);
             return getPredicate(cb, operation, path, validLong(value));
         };
     }
@@ -144,28 +148,28 @@ public class RouteSpecification {
     private static Specification<Route> toName(String operation, String value) {
         validateStringOperation(operation, value);
         return (root, query, cb) -> {
-            var path = root.get("to").get("name").as(String.class);
+            var path = root.get(Route_.to).get(Location_.name);
             return getPredicate(cb, operation, path, value);
         };
     }
 
     private static Specification<Route> toCoordinatesX(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("to").get("coordinates").get("x").as(Long.class);
+            var path = root.get(Route_.to).get(Location_.coordinates).get(Coordinates_.x);
             return getPredicate(cb, operation, path, validLong(value));
         };
     }
 
     private static Specification<Route> toCoordinatesY(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("to").get("coordinates").get("y").as(Integer.class);
+            var path = root.get(Route_.to).get(Location_.coordinates).get(Coordinates_.y);
             return getPredicate(cb, operation, path, validInt(value));
         };
     }
 
     private static Specification<Route> toCoordinatesZ(String operation, String value) {
         return (root, query, cb) -> {
-            var path = root.get("to").get("coordinates").get("z").as(Long.class);
+            var path = root.get(Route_.to).get(Location_.coordinates).get(Coordinates_.z);
             return getPredicate(cb, operation, path, validLong(value));
         };
     }

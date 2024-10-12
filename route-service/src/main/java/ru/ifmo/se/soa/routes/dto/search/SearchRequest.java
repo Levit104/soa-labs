@@ -11,6 +11,8 @@ public record SearchRequest(
         @Valid
         List<FilterSpec> filters,
 
+        boolean anyFilter,
+
         @Valid
         PageSpec page
 ) {

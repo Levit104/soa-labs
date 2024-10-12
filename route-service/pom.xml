@@ -110,6 +110,11 @@
                                 <artifactId>lombok-mapstruct-binding</artifactId>
                                 <version>${lombok-mapstruct-binding.version}</version>
                             </path>
+                            <path>
+                                <groupId>org.hibernate.orm</groupId>
+                                <artifactId>hibernate-jpamodelgen</artifactId>
+                                <version>${hibernate.orm.version}</version>
+                            </path>
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>

@@ -35,7 +35,7 @@ public class RouteServiceImpl implements RouteService {
     public Page<RouteDto> search(SearchRequest searchRequest) {
         var routesPage = Optional.ofNullable(searchRequest)
                 .map(request -> routeRepository.findAll(
-                        RouteSpecification.applyFilters(request.filters()),
+                        RouteSpecification.applyFilters(request.filters(), request.anyFilter()),
                         PageSorting.sortPage(request.sorts(), request.page()))
                 )
                 .orElseGet(() -> routeRepository.findAll(PageSorting.sortPage()));
