@@ -37,7 +37,7 @@ public class PageSorting {
             return defaultSort();
         }
 
-        if (ValidationUtils.hasDuplicates(sorts)) {
+        if (hasDuplicates(sorts)) {
             throw new InvalidSearchSpecsException("Дублирующиеся параметры сортировки");
         }
 
@@ -55,6 +55,11 @@ public class PageSorting {
 
     private static List<Sort.Order> defaultSort() {
         return List.of(Sort.Order.by(DEFAULT_SORT_PROPERTY).with(DEFAULT_SORT_DIRECTION));
+    }
+
+    private static boolean hasDuplicates(List<SortSpec> sorts) {
+        boolean duplicateFields = sorts.stream().map(SortSpec::field).distinct().toList().size() != sorts.size();
+        return ValidationUtils.hasDuplicates(sorts) || duplicateFields;
     }
 
     private static boolean shouldApplySort(SortSpec sort) {

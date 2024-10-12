@@ -36,12 +36,10 @@ public class ValidationUtils {
     public static final String SORT_ORDERS = "^(ASC|DESC)$";
     public static final String INVALID_SORT_ORDER = "Некорректный порядок сортировки";
 
+    public static final String STRING_FILTER_OPERATIONS = "^(=|!=)$";
+
     public static boolean notBlank(String string) {
         return string != null && !string.isBlank();
-    }
-
-    public static boolean isStringOperation(String operation) {
-        return operation.matches("^(=|!=)$");
     }
 
     public static <T> boolean hasDuplicates(List<T> list) {

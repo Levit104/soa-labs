@@ -190,7 +190,7 @@ public class RouteSpecification {
     }
 
     private static void validateStringOperation(String operation, String value) {
-        if (!ValidationUtils.isStringOperation(operation)) {
+        if (!operation.matches(ValidationUtils.STRING_FILTER_OPERATIONS)) {
             throw new InvalidSearchSpecsException("Операция %s не применима к строке %s".formatted(operation, value));
         }
     }
