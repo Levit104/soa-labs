@@ -1,12 +1,14 @@
 package ru.ifmo.se.soa.routes.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import ru.ifmo.se.soa.routes.dto.RouteDto;
 import ru.ifmo.se.soa.routes.dto.RouteRequest;
 import ru.ifmo.se.soa.routes.dto.group.RouteSummary;
+import ru.ifmo.se.soa.routes.dto.search.SearchRequest;
 import ru.ifmo.se.soa.routes.entity.Route;
 import ru.ifmo.se.soa.routes.exception.EntityNotFoundException;
 import ru.ifmo.se.soa.routes.exception.EntityValidationException;
@@ -14,10 +16,13 @@ import ru.ifmo.se.soa.routes.mapper.RouteMapper;
 import ru.ifmo.se.soa.routes.repository.RouteRepository;
 import ru.ifmo.se.soa.routes.service.LocationService;
 import ru.ifmo.se.soa.routes.service.RouteService;
+import ru.ifmo.se.soa.routes.service.search.PageSorting;
+import ru.ifmo.se.soa.routes.service.search.RouteSpecification;
 import ru.ifmo.se.soa.routes.util.ValidationUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,18 @@ public class RouteServiceImpl implements RouteService {
     private final RouteRepository routeRepository;
     private final RouteMapper routeMapper;
     private final LocationService locationService;
+
+    @Override
+    public Page<RouteDto> search(SearchRequest searchRequest) {
+        var routesPage = Optional.ofNullable(searchRequest)
+                .map(request -> routeRepository.findAll(
+                        RouteSpecification.applyFilters(request.filters()),
+                        PageSorting.sortPage(request.sorts(), request.page()))
+                )
+                .orElseGet(() -> routeRepository.findAll(PageSorting.sortPage()));
+
+        return routesPage.map(routeMapper::toDto);
+    }
 
     @Override
     public List<RouteDto> getAll() {

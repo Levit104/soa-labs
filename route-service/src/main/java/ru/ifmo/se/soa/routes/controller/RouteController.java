@@ -2,12 +2,14 @@ package ru.ifmo.se.soa.routes.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.soa.routes.dto.RouteDto;
 import ru.ifmo.se.soa.routes.dto.RouteRequest;
 import ru.ifmo.se.soa.routes.dto.group.RouteSummary;
+import ru.ifmo.se.soa.routes.dto.search.SearchRequest;
 import ru.ifmo.se.soa.routes.exception.EntityValidationException;
 import ru.ifmo.se.soa.routes.service.RouteService;
 import ru.ifmo.se.soa.routes.util.ControllerUtils;
@@ -19,6 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RouteController {
     private final RouteService routeService;
+
+    @PostMapping("/search")
+    public Page<RouteDto> search(@Valid @RequestBody(required = false) SearchRequest searchRequest) {
+        return routeService.search(searchRequest);
+    }
 
     @GetMapping
     public List<RouteDto> getAll() {

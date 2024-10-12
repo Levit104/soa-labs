@@ -1,6 +1,7 @@
 package ru.ifmo.se.soa.routes.controller.advice;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -22,6 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalControllerAdvice {
     @ExceptionHandler({
             NoHandlerFoundException.class,
@@ -53,7 +55,8 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler({
             HttpMessageNotReadableException.class,
-            MethodArgumentTypeMismatchException.class
+            MethodArgumentTypeMismatchException.class,
+            InvalidSearchSpecsException.class
     })
     public ResponseEntity<ApiError> handleBadRequestExceptions(HttpServletRequest request, Exception e) {
         return newError(request, HttpStatus.BAD_REQUEST, e.getMessage());
@@ -71,6 +74,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleOtherExceptions(HttpServletRequest request, Exception e) {
+        log.error(e.getMessage(), e);
         return newError(request, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
