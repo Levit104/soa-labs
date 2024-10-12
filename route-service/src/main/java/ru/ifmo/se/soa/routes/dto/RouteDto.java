@@ -10,7 +10,7 @@ public record RouteDto(
 
         String name,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_FORMAT)
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_FORMAT, timezone = "Europe/Moscow")
         Date creationDate,
 
         LocationDto from,

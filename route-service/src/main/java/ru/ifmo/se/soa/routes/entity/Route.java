@@ -24,7 +24,7 @@ public class Route {
     @Column(columnDefinition = "varchar(255) check (trim(name) <> '')", nullable = false)
     private String name;
 
-    @Column(nullable = false, updatable = false)
+    @Column(columnDefinition = "date", nullable = false, updatable = false)
     private Date creationDate = new Date();
 
     @ManyToOne
