@@ -30,13 +30,13 @@ public class ValidationUtils {
     public static final String INVALID_FILTER_FIELD = "Некорректное поле для фильтра";
     public static final String INVALID_SORT_FIELD = "Некорректное поле для сортировки";
 
-    public static final String FILTER_OPERATIONS = "^(=|!=|>=|<=|>|<)$";
+    public static final String FILTER_OPERATIONS = "^(=|!=|>=|<=|>|<|~|!~)$";
     public static final String INVALID_FILTER_OPERATION = "Неподдерживаемая операция для фильтра";
 
     public static final String SORT_ORDERS = "^(ASC|DESC)$";
     public static final String INVALID_SORT_ORDER = "Некорректный порядок сортировки";
 
-    public static final String STRING_FILTER_OPERATIONS = "^(=|!=)$";
+    public static final String STRING_FILTER_OPERATIONS = "^(=|!=|~|!~)$";
 
     public static boolean notBlank(String string) {
         return string != null && !string.isBlank();

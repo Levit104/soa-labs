@@ -174,6 +174,7 @@ public class RouteSpecification {
         };
     }
 
+    // TODO запретить like и notLike не строкам и не датам?
     private static <T extends Comparable<T>> Predicate getPredicate(
             CriteriaBuilder cb, String operation, Expression<T> path, T value
     ) {
@@ -184,9 +185,19 @@ public class RouteSpecification {
             case ">=" -> cb.greaterThanOrEqualTo(path, value);
             case "<" -> cb.lessThan(path, value);
             case "<=" -> cb.lessThanOrEqualTo(path, value);
+            case "~" -> cb.like(path.as(String.class), getLikePattern(value));
+            case "!~" -> cb.notLike(path.as(String.class), getLikePattern(value));
             default -> // валидация идёт в DTO, до сюда дойти не должно
                     throw new InvalidSearchSpecsException("Неподдерживаемая операция '%s' для фильтра".formatted(operation));
         };
+    }
+
+    private static <T> String getLikePattern(T value) {
+        if (value instanceof Date) {
+            return "%" + DateUtils.format((Date) value) + "%";
+        }
+
+        return "%" + value + "%";
     }
 
     private static void validateStringOperation(String operation, String value) {
