@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import ru.ifmo.se.soa.routes.dto.RouteDto;
 import ru.ifmo.se.soa.routes.dto.RouteRequest;
 import ru.ifmo.se.soa.routes.dto.group.RouteSummary;
-import ru.ifmo.se.soa.routes.dto.search.SearchRequest;
+import ru.ifmo.se.soa.routes.dto.search.*;
 import ru.ifmo.se.soa.routes.entity.Route;
 import ru.ifmo.se.soa.routes.exception.EntityNotFoundException;
 import ru.ifmo.se.soa.routes.exception.EntityValidationException;
@@ -22,7 +22,6 @@ import ru.ifmo.se.soa.routes.util.ValidationUtils;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,12 +32,11 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public Page<RouteDto> search(SearchRequest searchRequest) {
-        var routesPage = Optional.ofNullable(searchRequest)
-                .map(request -> routeRepository.findAll(
-                        RouteSpecification.applyFilters(request.filters(), request.anyFilter()),
-                        PageSorting.sortPage(request.sorts(), request.page()))
-                )
-                .orElseGet(() -> routeRepository.findAll(PageSorting.sortPage()));
+        if (searchRequest == null) {
+            searchRequest = SearchRequest.builder().build();
+        }
+
+        var routesPage = getSearchResult(searchRequest);
 
         return routesPage.map(routeMapper::toDto);
     }
@@ -93,6 +91,13 @@ public class RouteServiceImpl implements RouteService {
         return routeRepository.groupByFrom();
     }
 
+    private Page<Route> getSearchResult(SearchRequest searchRequest) {
+        return routeRepository.findAll(
+                RouteSpecification.applyFilters(searchRequest.filters(), searchRequest.anyFilter()),
+                PageSorting.sortPage(searchRequest.sorts(), searchRequest.unsorted(), searchRequest.page())
+        );
+    }
+
     private Route findById(Integer id) {
         return routeRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Маршрут #%d не найден".formatted(id))
@@ -100,9 +105,22 @@ public class RouteServiceImpl implements RouteService {
     }
 
     private Route findOneByDistance(Integer distance) {
-        return routeRepository.findOneByDistance(distance).orElseThrow(
-                () -> new EntityNotFoundException("Маршрут с расстоянием %d не найден".formatted(distance))
-        );
+        var filter = new FilterSpec("distance", "=", distance.toString());
+        var page = new PageSpec(0, 1);
+
+        var searchRequest = SearchRequest.builder()
+                .unsorted(true)
+                .filters(List.of(filter))
+                .page(page)
+                .build();
+
+        var routesPage = getSearchResult(searchRequest);
+
+        if (routesPage.isEmpty()) {
+            throw new EntityNotFoundException("Маршрут с расстоянием %d не найден".formatted(distance));
+        }
+
+        return routesPage.getContent().get(0);
     }
 
     private void validate(RouteRequest routeRequest, BindingResult bindingResult) throws EntityValidationException {

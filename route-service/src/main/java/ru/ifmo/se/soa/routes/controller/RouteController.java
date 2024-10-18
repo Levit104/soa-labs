@@ -27,7 +27,7 @@ public class RouteController {
         return routeService.search(searchRequest);
     }
 
-    @GetMapping
+    // @GetMapping
     public List<RouteDto> getAll() {
         return routeService.getAll();
     }

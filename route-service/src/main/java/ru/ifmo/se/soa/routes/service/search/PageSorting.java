@@ -20,21 +20,17 @@ public class PageSorting {
     private static final int DEFAULT_PAGE_NUMBER = 0;
     private static final int DEFAULT_PAGE_SIZE = 10;
 
-    public static Pageable sortPage(List<SortSpec> sorts, PageSpec page) {
-        var sortOrders = getSortOrders(sorts);
+    public static Pageable sortPage(List<SortSpec> sorts, boolean unsorted, PageSpec page) {
+        var sort = getSort(sorts, unsorted);
         var pageNumber = getPageNumber(page);
         var pageSize = getPageSize(page);
 
-        return PageRequest.of(pageNumber, pageSize, Sort.by(sortOrders));
+        return PageRequest.of(pageNumber, pageSize, sort);
     }
 
-    public static Pageable sortPage() {
-        return PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE, Sort.by(defaultSort()));
-    }
-
-    private static List<Sort.Order> getSortOrders(List<SortSpec> sorts) {
+    private static Sort getSort(List<SortSpec> sorts, boolean unsorted) {
         if (sorts == null || sorts.isEmpty()) {
-            return defaultSort();
+            return unsorted ? Sort.unsorted() : Sort.by(defaultSortOrder());
         }
 
         if (hasDuplicates(sorts)) {
@@ -50,11 +46,11 @@ public class PageSorting {
             throw new InvalidSearchSpecsException("Некорректные параметры сортировки");
         }
 
-        return sortOrders;
+        return Sort.by(sortOrders);
     }
 
-    private static List<Sort.Order> defaultSort() {
-        return List.of(Sort.Order.by(DEFAULT_SORT_PROPERTY).with(DEFAULT_SORT_DIRECTION));
+    private static Sort.Order defaultSortOrder() {
+        return Sort.Order.by(DEFAULT_SORT_PROPERTY).with(DEFAULT_SORT_DIRECTION);
     }
 
     private static boolean hasDuplicates(List<SortSpec> sorts) {
