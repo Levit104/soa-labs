@@ -18,11 +18,15 @@ public class JpaProperties {
     @Value("${spring.jpa.properties.hibernate.physical_naming_strategy}")
     private String physicalNamingStrategy;
 
+    @Value("${spring.jpa.properties.hibernate.format_sql}")
+    private String formatSql;
+
     public Properties get() {
         var properties = new Properties();
         properties.setProperty("hibernate.show_sql", showSql);
         properties.setProperty("hibernate.hbm2ddl.auto", ddlAuto);
         properties.setProperty("hibernate.physical_naming_strategy", physicalNamingStrategy);
+        properties.setProperty("hibernate.format_sql", formatSql);
         return properties;
     }
 }
